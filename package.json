@@ -1,0 +1,29 @@
+{
+	"name": "schedule-bot",
+	"module": "index.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "bun run --watch ./src/index.ts",
+		"start": "bun run ./src/index.ts",
+		"build": "bun build ./src/index.ts --outfile=dist.js --target=bun",
+		"lint": "bunx @biomejs/biome format --write src"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.2",
+		"@types/bun": "^1.1.9",
+		"prisma": "^5.19.1"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"@formkit/tempo": "^0.1.2",
+		"@gramio/autoload": "^1.1.0",
+		"@gramio/prompt": "^1.1.4",
+		"@mtcute/bun": "^0.16.9",
+		"@mtcute/dispatcher": "^0.16.9",
+		"@prisma/client": "5.19.1",
+		"gramio": "^0.0.50",
+		"xlsx": "^0.18.5"
+	}
+}
