@@ -2,6 +2,7 @@ import { InlineKeyboard, InlineQueryResult, InputMessageContent } from "gramio"
 import { botService } from ".."
 import { prisma } from "@src/database/postgresql/prisma"
 import { format } from "@formkit/tempo"
+import { replaceRoom } from "@src/shared/utils/schedule"
 
 
 
@@ -13,7 +14,7 @@ export const sendMySchedule = () => {
             },
         });
 
-        if(!user || !user.group) return ctx.answer([
+        if (!user || !user.group) return ctx.answer([
             InlineQueryResult.article(
                 "id=1",
                 "Авторизуйтесь в боте",
@@ -32,7 +33,7 @@ export const sendMySchedule = () => {
             }
         });
 
-        if(!group) return ctx.answer([
+        if (!group) return ctx.answer([
             InlineQueryResult.article(
                 "id=1",
                 "Данной группы не существует",
@@ -59,7 +60,7 @@ export const sendMySchedule = () => {
         });
 
         date.setDate(date.getDate() + 1);
-        
+
 
         const lessonsTomorrow = await prisma.lessons.findMany({
             where: {
@@ -75,17 +76,17 @@ export const sendMySchedule = () => {
             }
         });
 
-        if(lessonsCurrentDay.length === 0) {
+        if (lessonsCurrentDay.length === 0) {
             return ctx.answer([
                 InlineQueryResult.article(
                     "id=1",
                     "На сегодня расписания нет",
-                    InputMessageContent.text("Пусто")
+                    InputMessageContent.text("Расписания нет.")
                 ),
                 InlineQueryResult.article(
                     "id=2",
                     lessonsTomorrow.length > 0 ? "Расписание на завтра" : "Расписание на завтра нет",
-                    InputMessageContent.text("Пусто")
+                    InputMessageContent.text("Расписания нет.")
                 )
             ], {
                 cache_time: 0,
@@ -93,37 +94,21 @@ export const sendMySchedule = () => {
         }
 
 
-        let textCurrentDay = '';
-        let textTomorrow = '';
+        let textCurrentDay = lessonsCurrentDay
+            .map(lesson => replaceRoom('', lesson))
+            .join('');
 
-        for(const lesson of lessonsCurrentDay) {
-            const descipline = isNaN(Number(lesson.descipline)) ? lesson.descipline : lesson.room;
-            const count = isNaN(Number(lesson.descipline)) ? lesson.count : lesson.descipline;
-            const room = isNaN(Number(lesson.descipline)) ? lesson.room : "";
+        let textTomorrow = lessonsTomorrow
+            .map(lesson => replaceRoom('', lesson))
+            .join('');
 
-            if(lesson.status === "JOINED") textCurrentDay += `<b>Пара: ${count}</b>\n  Дисциплина: ${descipline}\n   Кабинет: ${room}\n\n`;
-            if(lesson.status === "SubGroup1") textCurrentDay += `<b>Пара: ${count}</b>\n  Дисциплина: ${descipline}\n   Первая подгруппа: ${room}\n`;
-            if(lesson.status === "SubGroup2") textCurrentDay += `   Вторая подгруппа: ${room}\n\n`;
-        }
-
-        for(const lesson of lessonsTomorrow) {
-            // На случай если не указаны кабинеты
-            const descipline = isNaN(Number(lesson.descipline)) ? lesson.descipline : lesson.room;
-            const count = isNaN(Number(lesson.descipline)) ? lesson.count : lesson.descipline;
-            const room = isNaN(Number(lesson.descipline)) ? lesson.room : "";
-
-            if(lesson.status === "JOINED") textTomorrow += `<b>Пара: ${count}</b>\n  Дисциплина: ${descipline}\n   Кабинет: ${room}\n\n`;
-            if(lesson.status === "SubGroup1") textTomorrow += `<b>Пара: ${count}</b>\n  Дисциплина: ${descipline}\n   Первая подгруппа: ${room}\n`;
-            if(lesson.status === "SubGroup2") textTomorrow += `   Вторая подгруппа: ${room}\n\n`;
-        }
-        
         await ctx.answer([
             InlineQueryResult.article(
                 "id=1",
                 "Расписание на сегодня",
                 InputMessageContent.text("⭐️ Моё расписание на <b>сегодня</b>:\n\n" + textCurrentDay, {
                     parse_mode: "HTML"
-                    
+
                 })
             ),
             InlineQueryResult.article(
@@ -131,7 +116,7 @@ export const sendMySchedule = () => {
                 "Расписание на завтра",
                 InputMessageContent.text("⭐️ Моё расписание на <b>завтра</b>:\n\n" + textTomorrow, {
                     parse_mode: "HTML"
-                    
+
                 })
             )
         ], {

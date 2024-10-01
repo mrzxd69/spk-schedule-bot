@@ -1,10 +1,22 @@
 import { InlineKeyboard } from "gramio"
-import { scheduleStart as scheduleStartData } from "@keyboards/data/schedule"
+import {
+    scheduleStartGroupData,
+    scheduleStartTeacherData
+} from "@keyboards/data/schedule"
 
-export const scheduleStart = (group: string, tomorrow: boolean) => {
+export const scheduleStartGroup = (group: string, tomorrow: boolean) => {
     return new InlineKeyboard()
-        .text(`Расписание на ${tomorrow ? 'сегодня' : 'завтра'}`, scheduleStartData.pack({
+        .text(`Расписание на ${tomorrow ? 'сегодня' : 'завтра'}`, scheduleStartGroupData.pack({
             tomorrow: !tomorrow,
             group
+        }));
+}
+
+export const scheduleStartTeacher = (teacher: string, tomorrow: boolean) => {
+
+    return new InlineKeyboard()
+        .text(`Расписание на ${tomorrow ? 'сегодня' : 'завтра'}`, scheduleStartTeacherData.pack({
+            tomorrow: !tomorrow,
+            teacher
         }));
 }

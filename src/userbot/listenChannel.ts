@@ -36,11 +36,11 @@ export const listenChannel = async () => {
 				await fs
 					.rmdir(path.resolve() + "/data", { recursive: true })
 					.catch(() => console.log("Данной директории не существует"));
-				
+
 				await fs
 					.mkdir(path.resolve() + "/data", { recursive: true })
 					.catch(() => console.log("Ошибка при создании директории"));
-					
+
 				await downloadFiles(media);
 
 				const date = media.fileName!.match(/\d{2}\.\d{2}/);
@@ -55,13 +55,12 @@ export const listenChannel = async () => {
 };
 
 const parseSchedules = async (date: string) => {
-	const teachers = new Parser('каб', date);
 	const students = new Parser('у', date);
-	await Promise.all([
-		await teachers.start(),
-		await students.start()
-	]);
-};
+	const teachers = new Parser('каб', date);
+
+	await students.start();
+	await teachers.start();
+}
 
 const checkDocument = async (documentName: string) => {
 	const regex = new RegExp(/(учен|кабин)/i);

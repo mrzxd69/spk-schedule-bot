@@ -45,10 +45,10 @@ export const sendGroupSchedule = async (group: string, text: string) => {
 
 
 export const sendTeachersSchedule = async (users: any[], text: string) => {
-	for (const user of users) {
-		await sendMessage(
-			String(user.telegram_id),
-			text		
+    for (const user of users) {
+        await sendMessage(
+            String(user.telegram_id),
+            text
         );
-	}
+    }
 };

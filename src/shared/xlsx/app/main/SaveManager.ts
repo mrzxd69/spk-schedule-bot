@@ -1,11 +1,11 @@
-import { 
-    addGroup, 
-    addTeachers 
+import {
+    addGroup,
+    addTeachers
 } from "@postgresql/abstractions/schedule";
 
-import { 
-    addLessonsStudents, 
-    addLessonsTeachers 
+import {
+    addLessonsStudents,
+    addLessonsTeachers
 } from "@shared/newsletter/processing/generation";
 
 import { FileManager } from "../../internal/FileManager";
@@ -53,7 +53,7 @@ export class SaveManager {
             this.result = filter.TransformedDataTeacher(create.createScheduleTeacher())
 
             const teachers = []
-            for(const teacher in this.result) {
+            for (const teacher in this.result) {
                 teachers.push(teacher);
             }
 
@@ -74,7 +74,7 @@ export class SaveManager {
             for (const group of Object.keys(section)) {
                 if (group.length < 13) {
                     const match = group.match(/^([А-Яа-яA-Za-z]+)(\d+.*)$/);
-                    if(match && match[1] && match[2]) {
+                    if (match && match[1] && match[2]) {
                         res.push({
                             route: match[1],
                             course: match[2]

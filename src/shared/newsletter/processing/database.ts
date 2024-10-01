@@ -7,6 +7,12 @@ const subGroup: any = {
     3: ' Третья подгруппа',
 };
 
+const subGroupTeachers: any = {
+    "(2гр)": "SubGroup2",
+    "(1гр)": "SubGroup1",
+    "": "JOINED"
+}
+
 export const processingLesson = async (group: string, date: string, lesson: string, lessonValue: any[]) => {
     let allRecordsExist = true;
     let text = '';
@@ -199,5 +205,54 @@ export const processingLesson = async (group: string, date: string, lesson: stri
         }
     } catch (e) {
         console.log(e);
+    }
+}
+
+
+export const processingTeacherLesson = async (text: string, teacher: string, teacherData: any, date: string) => {
+    let allRecordsExist = true;
+
+    for (const lesson in teacherData) {
+        let [group, subGroup] = teacherData[lesson].split(" ");
+        const count = lesson.split(" ")[0];
+
+        subGroup = typeof subGroup === "undefined" ? "" : subGroup;
+
+        const teacherExist = await prisma.teachers.findFirst({
+            where: {
+                initials: teacher
+            }
+        });
+
+        if (!teacherExist) continue;
+
+        const exist = await prisma.lessons.findFirst({
+            where: {
+                group,
+                count: Number(count),
+                status: subGroupTeachers[subGroup],
+                date
+            }
+        });
+
+        if (exist) {
+            if (exist.teacher !== teacherExist.id) {
+                allRecordsExist = false;
+                text += `• <b>${lesson}</b>:\n Группа ${group}\n Кабинет: ${exist.room}\n\n`
+                await prisma.lessons.update({
+                    data: {
+                        teacher: teacherExist.id
+                    },
+                    where: {
+                        id: exist.id
+                    }
+                });
+            }
+        }
+    }
+
+    return {
+        stateAllRecordExist: allRecordsExist,
+        text
     }
 }

@@ -1,4 +1,4 @@
-import { format, bold, italic,  } from 'gramio';
+import { format, bold, italic, } from 'gramio';
 
 import type { TBot } from "@src/bot";
 import { isStudentKeyboard, isStudentData, getChooseRouteKeyboard, pagination, searchTeacherKeyboard } from '@bot/keyboards';
@@ -13,17 +13,11 @@ export default (bot: TBot) => {
         });
     });
 
-    
+
     bot.callbackQuery(isStudentData, async ctx => {
         const { isStudent } = ctx.queryData;
 
         if (!isStudent) {
-            if (ctx.message?.chat.type === "group") {
-                return ctx.answerCallbackQuery({
-                    text: "Преподаватели в группах не поддерживаются. Это не имеет смысла.",
-                });
-            }
-
             const initials = await ctx.prompt(
                 format`Введите ваши инициалы:\n\n(${italic("Пример:")} ${bold("Иванов И.И.")} или ${bold("Иванов")})`
             );

@@ -1,5 +1,5 @@
 import type { TBot } from "@bot/index";
-import { settings, settingsKeyboard } from "@bot/keyboards";
+import { settingsKeyboard } from "@bot/keyboards";
 
 
 export default (bot: TBot) => {

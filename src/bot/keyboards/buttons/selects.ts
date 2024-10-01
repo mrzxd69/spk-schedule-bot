@@ -1,5 +1,6 @@
 import { InlineKeyboard } from "gramio";
 import {
+	exitStartData,
 	isStudentData,
 	pagination,
 	selectCourse,
@@ -15,6 +16,7 @@ export const isStudentKeyboard = () => {
 		.text('📙 Я студент', isStudentData.pack({ isStudent: true }))
 		.text('📚 Я преподаватель', isStudentData.pack({ isStudent: false }));
 }
+
 
 export const getChooseRouteKeyboard = async (offset: number = 0): Promise<InlineKeyboard> => {
 	let buttonCountRow = 0;
@@ -53,7 +55,9 @@ export const getChooseRouteKeyboard = async (offset: number = 0): Promise<Inline
 		.row()
 		.text('«', pagination.pack({ offset: offset >= OFFSET_GROUP ? offset - OFFSET_GROUP : offset }))
 		.text(`${currentPage}/${totalPages}`, pagination.pack({ offset: 0 }))
-		.text('»', pagination.pack({ offset: offset + OFFSET_GROUP }));
+		.text('»', pagination.pack({ offset: offset + OFFSET_GROUP }))
+		.row()
+		.text("Назад", exitStartData.pack({}));
 
 	return keyboard;
 };
@@ -85,7 +89,9 @@ export const searchTeacherKeyboard = async (initials: string): Promise<InlineKey
 			);
 	}
 
-	return keyboard;
+	return keyboard
+		.row()
+		.text("Назад", isStudentData.pack({ isStudent: false }));
 }
 
 
@@ -120,5 +126,7 @@ export const getChooseCourseKeyboard = async (party: string) => {
 		);
 	}
 
-	return keyboard;
+	return keyboard
+		.row()
+		.text("Назад", isStudentData.pack({ isStudent: true }));
 };

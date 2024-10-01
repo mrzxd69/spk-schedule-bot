@@ -7,51 +7,51 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-
 model users {
-	id Int @id @default(autoincrement())
-	telegram_id BigInt
-	setting settings?
-	group Int?
-	teacher Int?
+    id          Int       @id @default(autoincrement())
+    telegram_id BigInt
+    setting     settings?
+    group       Int?
+    teacher     Int?
 }
 
 model conversations {
-	id Int @id @default(autoincrement())
-	telegram_id String
+    id          Int    @id @default(autoincrement())
+    telegram_id String
 }
 
 model groups {
-	id Int @id @default(autoincrement())
-	route String
-	course String
+    id     Int    @id @default(autoincrement())
+    route  String
+    course String
 }
 
 model teachers {
-	id Int @id @default(autoincrement())
-	initials String
+    id       Int    @id @default(autoincrement())
+    initials String
 }
 
 model settings {
-	id Int @id @default(autoincrement())
-	notification_schedule  Boolean
-	notification_news Boolean
-	userId Int @unique
-	user users @relation(fields: [userId], references: [id])
+    id                    Int     @id @default(autoincrement())
+    notification_schedule Boolean
+    notification_news     Boolean
+    userId                Int     @unique
+    user                  users   @relation(fields: [userId], references: [id])
 }
 
 model lessons {
-	id Int @id @default(autoincrement())
-	group String
-	count Int
-	descipline String
-	status StatusLesson @default(JOINED)
-	date String
-	room String
+    id         Int          @id @default(autoincrement())
+    group      String
+    count      Int
+    descipline String
+    status     StatusLesson @default(JOINED)
+    date       String
+    room       String
+    teacher    Int?
 }
 
 enum StatusLesson {
-	JOINED
-	SubGroup1
-	SubGroup2
+    JOINED
+    SubGroup1
+    SubGroup2
 }

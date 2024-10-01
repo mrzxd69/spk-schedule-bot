@@ -14,3 +14,5 @@ export const selectRoute = new CallbackData('selectRoute').string('route');
 
 export const pagination = new CallbackData('pagination')
 	.number('offset')
+
+export const exitStartData = new CallbackData('start');
