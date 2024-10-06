@@ -38,7 +38,7 @@ export default (bot: TBot) =>
 			let text = await getScheduleText('', lessons);
 			const isEmptyText = text.includes("b") ? text : "\n\nРасписания нет\n";
 
-			await ctx.editText(`🎉 Ваша группа: ${route + course}\n🗓 Расписание на сегодня:${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
+			await ctx.editText(`🎉 Ваша группа: ${route + course}\n🗓 Расписание на сегодня:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
 				parse_mode: "HTML",
 				reply_markup: scheduleStartGroup(String(route + course), false)
 			});
