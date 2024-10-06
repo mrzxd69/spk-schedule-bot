@@ -13,7 +13,7 @@ export default (bot: TBot) => {
         let text = await getScheduleText('', lessons);
 
         const isTomorrow = tomorrow ? 'завтра' : 'сегодня';
-        const isEmptyText = text.includes("b") ? text : "Расписания нет\n\n";
+        const isEmptyText = text.includes("b") ? text : "\n\nРасписания нет\n\n";
 
         await ctx.editText(
             `🎉 Группа: <b>${group}</b>\n🗓 Расписание на ${isTomorrow}:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`,
