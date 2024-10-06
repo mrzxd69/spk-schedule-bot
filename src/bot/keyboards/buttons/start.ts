@@ -13,7 +13,6 @@ export const scheduleStartGroup = (group: string, tomorrow: boolean) => {
 }
 
 export const scheduleStartTeacher = (teacher: string, tomorrow: boolean) => {
-
     return new InlineKeyboard()
         .text(`Расписание на ${tomorrow ? 'сегодня' : 'завтра'}`, scheduleStartTeacherData.pack({
             tomorrow: !tomorrow,

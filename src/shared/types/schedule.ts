@@ -21,6 +21,7 @@ export interface ILesson {
     status: LessonStatus;
     date: string;
     room: string;
+    teacher: number | null;
 }
 
 
@@ -32,4 +33,11 @@ export interface ITeacherLesson {
     count: string,
     room: string,
     date: string,
+}
+
+export interface IUser {
+    id: number;
+    telegram_id: bigint;
+    group: number | null;
+    teacher: number | null;
 }

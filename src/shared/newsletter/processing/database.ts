@@ -61,7 +61,7 @@ export const processingLesson = async (group: string, date: string, lesson: stri
 
             if (lessonValue[0].length === 1) {
                 const exist = await existLessons({
-                    count: 1,
+                    count: 0,
                     group: group,
                     status: "JOINED",
                     date: date,
@@ -74,7 +74,7 @@ export const processingLesson = async (group: string, date: string, lesson: stri
 
                     await prisma.lessons.create({
                         data: {
-                            count: 1,
+                            count: 0,
                             descipline: lesson,
                             group: group,
                             status: "JOINED",

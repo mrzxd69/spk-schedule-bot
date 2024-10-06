@@ -42,7 +42,6 @@ export const selectLessonsTeacher = async (teacher: string, isTomorrow: boolean)
         format: "DD.MM",
         tz: "Asia/Omsk"
     });
-    console.log(currentDay)
 
     const lessons = await prisma.lessons.findMany({
         where: {

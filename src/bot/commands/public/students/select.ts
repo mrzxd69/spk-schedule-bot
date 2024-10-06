@@ -7,7 +7,7 @@ import {
 import type { TBot } from '@bot/index';
 import { selectLessons } from '@postgresql/abstractions/select';
 import { scheduleStartGroup } from '@bot/keyboards/buttons/start';
-import { replaceRoom } from '@src/shared/utils/schedule';
+import { getScheduleText } from '@src/shared/utils/schedule';
 
 export default (bot: TBot) =>
 	bot
@@ -35,13 +35,10 @@ export default (bot: TBot) =>
 
 			const lessons = await selectLessons(String(route + course), false);
 
-			let text = lessons
-				.map(lesson => replaceRoom('', lesson))
-				.join('');
+			let text = await getScheduleText('', lessons);
+			const isEmptyText = text.includes("b") ? text : "Расписания нет\n\n";
 
-			const isEmptyText = text.includes("Пара") ? text : "Расписания нет\n\n";
-
-			await ctx.editText(`🎉 Ваша группа: ${route + course}\n🗓 Расписание на сегодня:\n\n${isEmptyText}⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
+			await ctx.editText(`🎉 Ваша группа: ${route + course}\n🗓 Расписание на сегодня:${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
 				parse_mode: "HTML",
 				reply_markup: scheduleStartGroup(String(route + course), false)
 			});
