@@ -100,7 +100,7 @@ const sendSchedule = async (
         InlineQueryResult.article(
             "id=1",
             "Расписание на сегодня",
-            InputMessageContent.text("📚 Моё расписание на <b>сегодня</b>:\n\n" + textCurrentDay, {
+            InputMessageContent.text("📚 Моё расписание на <b>сегодня</b>:\n" + textCurrentDay, {
                 parse_mode: "HTML"
 
             })
@@ -108,7 +108,7 @@ const sendSchedule = async (
         InlineQueryResult.article(
             "id=2",
             "Расписание на завтра",
-            InputMessageContent.text("📚 Моё расписание на <b>завтра</b>:\n\n" + textTomorrow, {
+            InputMessageContent.text("📚 Моё расписание на <b>завтра</b>:\n" + textTomorrow, {
                 parse_mode: "HTML"
 
             })
