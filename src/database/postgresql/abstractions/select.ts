@@ -49,7 +49,7 @@ export const selectLessonsTeacher = async (teacher: string, isTomorrow: boolean)
             teacher: teacherId?.id
         },
         orderBy: {
-            id: "asc"
+            count: "asc"
         }
     });
 
