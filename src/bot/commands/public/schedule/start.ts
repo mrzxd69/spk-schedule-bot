@@ -33,7 +33,7 @@ export default (bot: TBot) => {
         let text = lessons.map(lesson => `• ${lesson.count} пара:\n Группа: ${lesson.group}\n Кабинет: ${lesson.room}\n\n`).join('');
 
         const isTomorrow = tomorrow ? 'завтра' : 'сегодня';
-        const isEmptyText = text.includes("Пара") ? text : "\n\nРасписания нет\n";
+        const isEmptyText = text.includes("пара") ? text : "\n\nРасписания нет\n";
 
         await ctx.editText(
             `🎉 Расписание на <b>${isTomorrow}</b>:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`,
