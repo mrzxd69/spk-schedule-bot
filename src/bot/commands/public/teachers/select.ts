@@ -23,7 +23,7 @@ export default (bot: TBot) =>
 
             let text = lessons.map(lesson => `• ${lesson.count} пара:\n Группа: ${lesson.group}\n Кабинет: ${lesson.room}\n\n`).join('');
 
-            return ctx.send("🎉 Расписание на <b>сегодня</b>:" + "\n\n" + text, {
+            return ctx.send("🎉 Расписание на <b>сегодня</b>:" + "\n\n" + text + "\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!", {
                 reply_markup: scheduleStartTeacher(ctx.queryData.initials, false),
                 parse_mode: "HTML"
             });

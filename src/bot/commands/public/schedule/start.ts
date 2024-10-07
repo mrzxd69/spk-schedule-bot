@@ -36,7 +36,7 @@ export default (bot: TBot) => {
         const isEmptyText = text.includes("пара") ? text : "\n\nРасписания нет\n";
 
         await ctx.editText(
-            `🎉 Расписание на <b>${isTomorrow}</b>:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`,
+            `🎉 Расписание на <b>${isTomorrow}</b>:\n\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`,
             {
                 parse_mode: "HTML",
                 reply_markup: scheduleStartTeacher(teacher, tomorrow)
