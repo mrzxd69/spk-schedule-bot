@@ -135,14 +135,10 @@ export const addLessonsTeachers = async (data: any[], date: string) => {
             }
         });
 
-        const {
-            stateAllRecordExist,
-            text
-        } = await generateTeacherScheduleText(teacher, data[teacher], date);
+        const textData = await generateTeacherScheduleText(teacher, data[teacher], date);
 
-
-        if (!stateAllRecordExist) {
-            await sendTeachersSchedule(users, text);
+        if (textData && !textData.stateAllRecordExist) {
+            await sendTeachersSchedule(users, textData.text);
         }
     }
 }

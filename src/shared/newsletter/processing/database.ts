@@ -212,49 +212,53 @@ export const processingTeacherLesson = async (
     teacherData: any,
     date: string
 ) => {
-    let allRecordsExist = true;
+    try {
+        let allRecordsExist = true;
 
-    for (const lesson in teacherData) {
-        let [group, subGroup] = teacherData[lesson].split(" ");
-        const count = lesson.split(" ")[0];
+        for (const lesson in teacherData) {
+            let [group, subGroup] = teacherData[lesson].split(" ");
+            const count = lesson.split(" ")[0];
 
-        subGroup = typeof subGroup === "undefined" ? "" : subGroup;
+            subGroup = typeof subGroup === "undefined" ? "" : subGroup;
 
-        const teacherExist = await prisma.teachers.findFirst({
-            where: {
-                initials: teacher
-            }
-        });
+            const teacherExist = await prisma.teachers.findFirst({
+                where: {
+                    initials: teacher
+                }
+            });
 
-        if (!teacherExist) continue;
+            if (!teacherExist) continue;
 
-        const exist = await prisma.lessons.findFirst({
-            where: {
-                group,
-                count: Number(count),
-                status: subGroupTeachers[subGroup],
-                date
-            }
-        });
+            const exist = await prisma.lessons.findFirst({
+                where: {
+                    group,
+                    count: Number(count),
+                    status: subGroupTeachers[subGroup],
+                    date
+                }
+            });
 
-        if (exist) {
-            if (exist.teacher !== teacherExist.id) {
-                allRecordsExist = false;
-                text += `• <b>${lesson}</b>:\n Группа ${group}\n Кабинет: ${exist.room}\n\n`
-                await prisma.lessons.update({
-                    data: {
-                        teacher: teacherExist.id
-                    },
-                    where: {
-                        id: exist.id
-                    }
-                });
+            if (exist) {
+                if (exist.teacher !== teacherExist.id) {
+                    allRecordsExist = false;
+                    text += `• <b>${lesson}</b>:\n Группа ${group}\n Кабинет: ${exist.room}\n\n`
+                    await prisma.lessons.update({
+                        data: {
+                            teacher: teacherExist.id
+                        },
+                        where: {
+                            id: exist.id
+                        }
+                    });
+                }
             }
         }
-    }
 
-    return {
-        stateAllRecordExist: allRecordsExist,
-        text
+        return {
+            stateAllRecordExist: allRecordsExist,
+            text
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
