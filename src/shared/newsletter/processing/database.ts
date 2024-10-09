@@ -14,6 +14,8 @@ const subGroupTeachers: any = {
 }
 
 export const processingLesson = async (group: string, date: string, lesson: string, lessonValue: any[]) => {
+    group = group.replace(/\s+/g, '');
+
     let allRecordsExist = true;
     let text = '';
     try {
@@ -141,6 +143,7 @@ export const processingLesson = async (group: string, date: string, lesson: stri
                 room: String(lessonValue[1][2]),
                 date: date
             });
+
 
             if (existSubGroup1 && existSubGroup1.descipline !== lessonValue[0][0]) {
                 allRecordsExist = false;

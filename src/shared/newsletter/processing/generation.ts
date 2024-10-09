@@ -60,6 +60,7 @@ export const addLessonsStudents = async (lessons: any[], date: string) => {
                     const resultRow = await getRowLesson(group, date, lesson, lessonValue);
 
                     text += resultRow.text;
+
                     if (!resultRow.stateRecordsExist) allRecordsExist = false;
                 }
 

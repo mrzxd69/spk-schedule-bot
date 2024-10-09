@@ -12,6 +12,8 @@ export const selectLessons = async (group: string, isTomorrow: boolean) => {
         tz: "Asia/Omsk"
     });
 
+    console.log(group, currentDay);
+
     const lessons = await prisma.lessons.findMany({
         where: {
             date: currentDay,
@@ -21,6 +23,7 @@ export const selectLessons = async (group: string, isTomorrow: boolean) => {
             id: "asc"
         }
     });
+    console.log(lessons)
 
     return lessons
 }

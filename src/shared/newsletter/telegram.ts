@@ -9,9 +9,10 @@ export const sendGroupSchedule = async (group: string, text: string) => {
     const existGroup = await prisma.groups.findFirst({
         where: {
             route: match[1],
-            course: match[2]
+            course: match[2].replace(/\s+/g, '')
         }
     });
+    console.log(match[1], match[2], existGroup)
 
     if (!existGroup) return;
 

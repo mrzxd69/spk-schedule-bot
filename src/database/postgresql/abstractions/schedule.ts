@@ -30,6 +30,11 @@ export const addTeachers = async (initials: string[]) => {
 
 export const addGroup = async (groups: { route: string, course: string }[]) => {
 	try {
+		const cleanedGroups = groups.map(group => ({
+			route: group.route.replace(/\s+/g, ''),
+			course: group.course.replace(/\s+/g, '')
+		}));
+
 		const existingGroups = await prisma.groups.findMany({
 			select: {
 				route: true,
@@ -39,7 +44,7 @@ export const addGroup = async (groups: { route: string, course: string }[]) => {
 
 		const existingGroupsSet = new Set(existingGroups.map(group => JSON.stringify(group)));
 
-		const newGroups = groups.filter(group => {
+		const newGroups = cleanedGroups.filter(group => {
 			const groupKey = JSON.stringify(group);
 			return !existingGroupsSet.has(groupKey);
 		});
