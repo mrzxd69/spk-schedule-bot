@@ -1,19 +1,13 @@
 import { prisma } from "@postgresql/prisma";
 import { existLessons } from "@postgresql/abstractions/schedule";
+import { subGroup, subGroupTeachers } from "@src/constants";
 
-const subGroup: any = {
-    1: ' Первая подгруппа',
-    2: ' Вторая подгруппа',
-    3: ' Третья подгруппа',
-};
-
-const subGroupTeachers: any = {
-    "(2гр)": "SubGroup2",
-    "(1гр)": "SubGroup1",
-    "": "JOINED"
-}
-
-export const processingLesson = async (group: string, date: string, lesson: string, lessonValue: any[]) => {
+export const processingLesson = async (
+    group: string,
+    date: string,
+    lesson: string,
+    lessonValue: any[]
+) => {
     group = group.replace(/\s+/g, '');
 
     let allRecordsExist = true;
@@ -212,7 +206,12 @@ export const processingLesson = async (group: string, date: string, lesson: stri
 }
 
 
-export const processingTeacherLesson = async (text: string, teacher: string, teacherData: any, date: string) => {
+export const processingTeacherLesson = async (
+    text: string,
+    teacher: string,
+    teacherData: any,
+    date: string
+) => {
     let allRecordsExist = true;
 
     for (const lesson in teacherData) {
