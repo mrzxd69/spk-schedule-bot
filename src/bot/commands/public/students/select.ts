@@ -26,7 +26,9 @@ export default (bot: TBot) =>
 
 			const { course, route } = ctx.queryData;
 
-			const registerId = ctx.message?.chat.id && ctx.message?.chat.id < 1 ? ctx.message?.chat.id : ctx.from.id;
+			const registerId = (ctx.message?.chat.id && ctx.message?.chat.id < 1)
+				? ctx.message?.chat.id
+				: ctx.from.id;
 
 			await register(
 				registerId,
