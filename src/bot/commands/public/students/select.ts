@@ -7,7 +7,7 @@ import {
 import type { TBot } from '@bot/index';
 import { selectLessons } from '@postgresql/abstractions/select';
 import { scheduleStartGroup } from '@bot/keyboards/buttons/start';
-import { getScheduleText } from '@src/shared/utils/schedule';
+import { getScheduleText } from '@shared/utils/schedule';
 
 export default (bot: TBot) =>
 	bot
@@ -26,8 +26,10 @@ export default (bot: TBot) =>
 
 			const { course, route } = ctx.queryData;
 
+			const registerId = ctx.message?.chat.id && ctx.message?.chat.id < 1 ? ctx.message?.chat.id : ctx.from.id;
+
 			await register(
-				ctx.from.id,
+				registerId,
 				route,
 				course,
 				null
