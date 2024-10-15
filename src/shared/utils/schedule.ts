@@ -2,7 +2,6 @@ import { LessonStatus } from "@typescript/enums";
 import type { ILesson } from "../types/schedule";
 import { prisma } from "@src/database/postgresql/prisma";
 
-
 export const processingLesson = async (text: string, lesson: any, isTeacher: boolean = false) => {
     const { count, descipline, room, teacher } = lesson;
     let teacherName = "";
@@ -10,10 +9,9 @@ export const processingLesson = async (text: string, lesson: any, isTeacher: boo
     if (teacher) {
         const teacherEntity = await prisma.teachers.findFirst({
             where: {
-                id: teacher
-            }
+                id: teacher,
+            },
         });
-
 
         teacherName = teacherEntity?.initials || "";
     }
@@ -24,14 +22,11 @@ export const processingLesson = async (text: string, lesson: any, isTeacher: boo
     if (lesson.status === LessonStatus.SubGroup1) text += `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
     if (lesson.status === LessonStatus.SubGroup2) text += `   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
 
-
     return text;
-}
+};
 
 export const getScheduleText = async (text: string, lessons: any, isTeacher: boolean = false) => {
-    const replacedLessons = await Promise.all(
-        lessons.map(async (lesson: ILesson) => await processingLesson(text, lesson, isTeacher))
-    );
+    const replacedLessons = await Promise.all(lessons.map(async (lesson: ILesson) => await processingLesson(text, lesson, isTeacher)));
 
-    return replacedLessons.join('');
-}
+    return replacedLessons.join("");
+};

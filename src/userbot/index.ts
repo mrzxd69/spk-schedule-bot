@@ -1,4 +1,4 @@
-import { TelegramClient } from '@mtcute/bun';
+import { TelegramClient } from "@mtcute/bun";
 
 const userService = new TelegramClient({
 	apiId: Number(process.env.APP_ID),
@@ -6,9 +6,9 @@ const userService = new TelegramClient({
 });
 
 await userService.start({
-	phone: () => userService.input('Phone > '),
-	code: () => userService.input('code > '),
-	password: () => userService.input('password > '),
+	phone: () => userService.input("Phone > "),
+	code: () => userService.input("code > "),
+	password: () => userService.input("password > "),
 });
 
 export { userService };

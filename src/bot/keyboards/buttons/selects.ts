@@ -1,33 +1,23 @@
 import { InlineKeyboard } from "gramio";
-import {
-	exitStartData,
-	isStudentData,
-	pagination,
-	selectCourse,
-	selectRoute,
-	selectTeacher
-} from "@keyboards/data/selects";
+import { exitStartData, isStudentData, pagination, selectCourse, selectRoute, selectTeacher } from "@keyboards/data/selects";
 import { prisma } from "@postgresql/prisma";
 
-const OFFSET_GROUP = 8
+const OFFSET_GROUP = 8;
 
 export const isStudentKeyboard = () => {
-	return new InlineKeyboard()
-		.text('📙 Я студент', isStudentData.pack({ isStudent: true }))
-		.text('📚 Я преподаватель', isStudentData.pack({ isStudent: false }));
-}
-
+	return new InlineKeyboard().text("📙 Я студент", isStudentData.pack({ isStudent: true })).text("📚 Я преподаватель", isStudentData.pack({ isStudent: false }));
+};
 
 export const getChooseRouteKeyboard = async (offset: number = 0): Promise<InlineKeyboard> => {
 	let buttonCountRow = 0;
 	let totalTeachers = await prisma.groups.findMany({
-		distinct: ['route']
+		distinct: ["route"],
 	});
 
 	const groups = await prisma.groups.findMany({
 		skip: offset,
 		take: OFFSET_GROUP,
-		distinct: ['route'],
+		distinct: ["route"],
 	});
 
 	if (groups.length === 0) {
@@ -40,12 +30,9 @@ export const getChooseRouteKeyboard = async (offset: number = 0): Promise<Inline
 		if (buttonCountRow % 2 === 0) {
 			keyboard.row();
 		}
-		keyboard.text(
-			group.route,
-			selectRoute.pack({ route: group.route })
-		);
+		keyboard.text(group.route, selectRoute.pack({ route: group.route }));
 
-		buttonCountRow++
+		buttonCountRow++;
 	}
 
 	const totalPages = Math.ceil(totalTeachers.length / OFFSET_GROUP);
@@ -53,48 +40,45 @@ export const getChooseRouteKeyboard = async (offset: number = 0): Promise<Inline
 
 	keyboard
 		.row()
-		.text('«', pagination.pack({ offset: offset >= OFFSET_GROUP ? offset - OFFSET_GROUP : offset }))
+		.text(
+			"«",
+			pagination.pack({
+				offset: offset >= OFFSET_GROUP ? offset - OFFSET_GROUP : offset,
+			}),
+		)
 		.text(`${currentPage}/${totalPages}`, pagination.pack({ offset: 0 }))
-		.text('»', pagination.pack({ offset: offset + OFFSET_GROUP }))
+		.text("»", pagination.pack({ offset: offset + OFFSET_GROUP }))
 		.row()
 		.text("Назад", exitStartData.pack({}));
 
 	return keyboard;
 };
 
-
 export const searchTeacherKeyboard = async (initials: string): Promise<InlineKeyboard | null> => {
 	const teachers = await prisma.teachers.findMany({
 		where: {
-			OR: [
-				{ initials: { contains: initials } },
-				{ initials: { startsWith: initials } },
-				{ initials: { endsWith: initials } }
-			]
-		}
+			initials: {
+				contains: initials,
+				mode: "insensitive"
+			}
+		},
 	});
 
-	if (teachers.length === 0) return null
+	if (teachers.length === 0) return null;
 
 	const keyboard = new InlineKeyboard();
 
 	for (const teacher of teachers) {
-		keyboard
-			.row()
-			.text(
-				teacher.initials,
-				selectTeacher.pack({
-					initials: teacher.initials
-				})
-			);
+		keyboard.row().text(
+			teacher.initials,
+			selectTeacher.pack({
+				initials: teacher.initials,
+			}),
+		);
 	}
 
-	return keyboard
-		.row()
-		.text("Назад", isStudentData.pack({ isStudent: false }));
-}
-
-
+	return keyboard.row().text("Назад", isStudentData.pack({ isStudent: false }));
+};
 
 export const getChooseCourseKeyboard = async (party: string) => {
 	let numerations = await prisma.groups.findMany({
@@ -126,7 +110,5 @@ export const getChooseCourseKeyboard = async (party: string) => {
 		);
 	}
 
-	return keyboard
-		.row()
-		.text("Назад", isStudentData.pack({ isStudent: true }));
+	return keyboard.row().text("Назад", isStudentData.pack({ isStudent: true }));
 };

@@ -1,4 +1,4 @@
-declare module 'bun' {
+declare module "bun" {
 	interface Env {
 		TELEGRAM_BOT_TOKEN: string;
 		APP_ID: string;

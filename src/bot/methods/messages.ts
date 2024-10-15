@@ -11,6 +11,6 @@ export const sendMessage = async (chatId: string, message: string) => {
 	return botService.api.sendMessage({
 		chat_id: chatId,
 		text: message,
-		parse_mode: 'HTML',
+		parse_mode: "HTML",
 	});
 };

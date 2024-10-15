@@ -5,12 +5,13 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "single"
+			"quoteStyle": "double"
 		}
 	},
 	"formatter": {
 		"indentStyle": "tab",
-		"indentWidth": 4
+		"indentWidth": 4,
+		"lineWidth": 300
 	},
 	"linter": {
 		"enabled": true,

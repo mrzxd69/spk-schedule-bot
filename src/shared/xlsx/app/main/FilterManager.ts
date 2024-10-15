@@ -5,7 +5,8 @@ export class FilterManager {
         this.result = Object.entries(scheduleT).reduce((acc, [surname, entries]) => {
             //@ts-ignore
             acc[surname] = entries.reduce((obj, [key, value]) => {
-                obj[key] = value;
+                const key_number = Number(String(key).split(" ")[0])
+                obj[key_number] = value;
                 return obj;
             }, {});
             return acc;
@@ -42,6 +43,10 @@ export class FilterManager {
                 this.result[groupName] = dataObject;
             }
 
+            if (String(groupName).includes("корп")) {
+                //@ts-ignore
+                delete this.result
+            }
         });
 
         return this.result;
