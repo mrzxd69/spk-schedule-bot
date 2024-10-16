@@ -6,6 +6,7 @@ import { allowChannelsList } from "@src/constants";
 import { userService } from "@src/userbot";
 import { DebounceMessage } from "@userbot/debounce";
 import { Parser } from "@src/shared/xlsx";
+import { sendPhoto } from "@src/shared/newsletter/sendPhoto";
 
 const downloadFiles = async (media: Document) => {
 	if (await fs.exists(path.resolve("/data", media.fileName!))) {
@@ -13,7 +14,8 @@ const downloadFiles = async (media: Document) => {
 	}
 
 	await userService.downloadToFile(path.resolve() + "/data/" + media.fileName!, media);
-};
+}
+
 
 export const listenChannel = async () => {
 	const dp = Dispatcher.for(userService);
@@ -23,7 +25,6 @@ export const listenChannel = async () => {
 		if (allowChannelsList.includes(chat.id) && media?.type === "document" && (await checkDocument(media.fileName!))) {
 			try {
 				await fs.rmdir(path.resolve() + "/data", { recursive: true }).catch(() => console.log("Данной директории не существует"));
-
 				await fs.mkdir(path.resolve() + "/data", { recursive: true }).catch(() => console.log("Ошибка при создании директории"));
 
 				await downloadFiles(media);
@@ -33,6 +34,19 @@ export const listenChannel = async () => {
 				debouncer.debounce(() => parseSchedules(String(date) || "не указано"), 3000);
 			} catch (e) {
 				console.log("Ошибка при обработке данных: " + e);
+			}
+		}
+
+		if (allowChannelsList.includes(chat.id) && media?.type === "document" && media?.fileName?.startsWith("Расписание на")) {
+			try {
+				await fs.rmdir(path.resolve() + "/data", { recursive: true }).catch(() => console.log("Данной директории не существует"));
+				await fs.mkdir(path.resolve() + "/data", { recursive: true }).catch(() => console.log("Ошибка при создании директории"));
+
+				await downloadFiles(media);
+
+				sendPhoto(media.fileName!);
+			} catch (e) {
+				console.log(e);
 			}
 		}
 	});
@@ -47,6 +61,6 @@ const parseSchedules = async (date: string) => {
 };
 
 const checkDocument = async (documentName: string) => {
-	const regex = new RegExp(/(учен|кабин)/i);
+	const regex = new RegExp(/(учен|кабин|зам)/i);
 	return documentName ? regex.test(documentName) : false;
 };

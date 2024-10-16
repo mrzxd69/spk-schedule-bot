@@ -16,7 +16,7 @@ export default (bot: TBot) => {
 		const { isStudent } = ctx.queryData;
 
 		if (!isStudent) {
-			if (ctx.message?.chat.type === "supergroup") {
+			if (ctx.message?.chat.type === "supergroup" || ctx.message?.chat.type === "group") {
 				return ctx.answerCallbackQuery({
 					text: "Преподаватели не поддерживаются в группах ❌",
 				});

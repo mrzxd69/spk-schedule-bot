@@ -9,14 +9,11 @@ const generateInitialTextGroup = async (group: string, date: string) => {
         where: { date, group },
     });
 
-    return existDate ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\nДата: ${getDefineDate(date)}\n\n` : `🖇 <b>Группа: </b> ${group}\n⏳ <b>Дата: </b> ${getDefineDate(date)}\n\n`;
+    return existDate ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\n\n🖇 <b>Группа: </b> ${group}\nДата: ${getDefineDate(date)}\n\n` : `🖇 <b>Группа: </b> ${group}\n⏳ <b>Дата: </b> ${getDefineDate(date)}\n\n`;
 };
 
 const generateInitialTextTeacher = async (teacher: string, date: string) => {
     const teacherId = await prisma.teachers.findFirst({
-        select: {
-            id: true,
-        },
         where: {
             initials: teacher,
         },
@@ -29,7 +26,9 @@ const generateInitialTextTeacher = async (teacher: string, date: string) => {
         },
     });
 
-    return existDate ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\nДата: ${getDefineDate(date)}\n\n` : `🗓 Новое расписание!\nДата: ${getDefineDate(date)}\n\n`;
+    return existDate
+        ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\n\n⭐️ <b>${teacherId?.initials}</b>\nДата: ${getDefineDate(date)}\n\n`
+        : `🗓 Новое расписание!\n\n⭐️ <b>${teacherId?.initials}</b>\nДата: ${getDefineDate(date)}\n\n`;
 };
 
 export const addLessonsStudents = async (lessons: any[], date: string) => {
@@ -119,20 +118,40 @@ export const addLessonsTeachers = async (data: any[], date: string) => {
 
         const users = await prisma.users.findMany({
             where: {
-                teacher: teacherId.id,
+                AND: [
+                    {
+                        teacher: teacherId.id,
+                    },
+                    {
+                        setting: {
+                            notification_schedule: {
+                                equals: true
+                            }
+                        }
+                    }
+                ]
             },
         });
 
-        const textData = await generateTeacherScheduleText(teacher, data[teacher], date);
+        const textData = await generateTeacherScheduleText(
+            teacher,
+            data[teacher],
+            date
+        );
 
         if (textData && !textData.stateAllRecordExist) {
             await sendTeachersSchedule(users, textData.text);
         }
     }
-};
+}
 
 const generateTeacherScheduleText = async (teacher: string, teacherData: any, date: string) => {
     let text = await generateInitialTextTeacher(teacher, date);
 
-    return processingTeacherLesson(text, teacher, teacherData, date);
+    return processingTeacherLesson(
+        text,
+        teacher,
+        teacherData,
+        date
+    );
 };

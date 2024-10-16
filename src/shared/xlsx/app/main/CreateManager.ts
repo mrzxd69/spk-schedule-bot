@@ -1,15 +1,19 @@
 import { CreateScheduleGroup } from "../features/group/CreateScheduleGroup";
 import { CreateMissingNumbers } from "../features/group/CreateMissNumber";
-import { CreateEmptyCoupleData } from "../features/teacher/CreateEmptyCoupleData";
+import { CreateEmptyCoupleData as emptyTeacher } from "../features/teacher/CreateEmptyCoupleData";
+import { CreateEmptyCoupleData as emptyEdit } from "../features/edit/CreateEmptyCoupleData";
 import { CreateScheduleTeacher } from "../features/teacher/CreateScheduleTeacher";
+import { CreateScheduleEdit } from "../features/edit/CreateScheduleEdit";
 
 export class CreateManager {
 	private CreateMissingNumbersEmpty: CreateMissingNumbers;
 	private CreateMissingNumbersGroup: CreateMissingNumbers;
 
-	private CreateEmptyCoupleData: CreateEmptyCoupleData;
+	private emptyTeacher: emptyTeacher;
+	private emptyEdit: emptyEdit;
 	private CreateScheduleGroup: CreateScheduleGroup;
 	private CreateScheduleTeacher: CreateScheduleTeacher;
+	private CreateScheduleEdit: CreateScheduleEdit;
 
 	constructor(
 		private data: Array<any>,
@@ -18,10 +22,12 @@ export class CreateManager {
 		this.CreateMissingNumbersEmpty = new CreateMissingNumbers();
 		this.CreateMissingNumbersGroup = new CreateMissingNumbers();
 
-		this.CreateEmptyCoupleData = new CreateEmptyCoupleData(this.data);
+		this.emptyTeacher = new emptyTeacher(this.data);
+		this.emptyEdit = new emptyEdit(this.data);
 
 		this.CreateScheduleGroup = new CreateScheduleGroup(this.data, this.counter);
 		this.CreateScheduleTeacher = new CreateScheduleTeacher(this.data);
+		this.CreateScheduleEdit = new CreateScheduleEdit(this.data);
 	}
 
 	public createScheduleGroup() {
@@ -29,6 +35,10 @@ export class CreateManager {
 	}
 
 	public createScheduleTeacher() {
-		return this.CreateScheduleTeacher.CreateScheduleTeacher(this.CreateEmptyCoupleData.CreateEmptyCoupleData());
+		return this.CreateScheduleTeacher.CreateScheduleTeacher(this.emptyTeacher.CreateEmptyCoupleData());
+	}
+
+	public createScheduleEdit() {
+		return this.CreateScheduleEdit.CreateScheduleEdit(this.emptyEdit.CreateEmptyCoupleData());
 	}
 }

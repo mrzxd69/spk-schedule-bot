@@ -14,9 +14,14 @@ export default (bot: TBot) =>
 
 		const lessons = await selectLessonsTeacher(ctx.queryData.initials, false);
 		let text = lessons.map((lesson) => `<b>• ${lesson.count} пара:</b>\n Группа: ${lesson.group}\n Кабинет: ${lesson.room}\n\n`).join("");
+		const isEmptyText = text.includes("b") ? text : "Расписания нет\n";
 
-		return ctx.send("🎉 Дата: " + getDate(false) + ":" + "\n\n" + text + "\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!", {
-			reply_markup: scheduleStartTeacher(ctx.queryData.initials.split(" ")[0], false),
-			parse_mode: "HTML",
-		});
+		return ctx.send(
+			"⭐️ <b>" + ctx.queryData.initials + "</b>" +
+			"\n🗓 Дата: " + getDate(false) + ":" + "\n\n" + isEmptyText +
+			"\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!",
+			{
+				reply_markup: scheduleStartTeacher(ctx.queryData.initials.split(" ")[0], false),
+				parse_mode: "HTML",
+			});
 	});

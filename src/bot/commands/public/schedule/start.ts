@@ -2,6 +2,7 @@ import type { TBot } from "@bot/index";
 import { scheduleStartGroup, scheduleStartTeacher } from "@bot/keyboards/buttons/start";
 import { scheduleStartGroupData, scheduleStartTeacherData } from "@bot/keyboards/data/schedule";
 import { selectLessons, selectLessonsTeacher } from "@postgresql/abstractions/select";
+import { prisma } from "@src/database/postgresql/prisma";
 import { getScheduleText } from "@src/shared/utils/schedule";
 import { getDate } from "@src/shared/utils/time";
 
@@ -13,9 +14,9 @@ export default (bot: TBot) => {
 
         let text = await getScheduleText("", lessons);
 
-        const isEmptyText = text.includes("b") ? text : "\n\nРасписания нет\n";
+        const isEmptyText = text.includes("b") ? "\n\n" + text : "\n\nРасписания нет\n";
 
-        await ctx.editText(`🎉 Группа: <b>${group}</b>\n🗓 Дата: ${getDate(tomorrow ? true : false)}:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
+        await ctx.editText(`🎉 Группа: <b>${group}</b>\n🗓 Дата: ${getDate(tomorrow ? true : false)}:${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
             parse_mode: "HTML",
         });
 
@@ -31,9 +32,17 @@ export default (bot: TBot) => {
             .map((lesson) => `<b>• ${lesson.count} пара:</b>\n Группа: ${lesson.group}\n Кабинет: ${lesson.room}\n\n`)
             .join("");
 
-        const isEmptyText = text.includes("пара") ? text : "\n\nРасписания нет\n";
+        const registeredTeacher = await prisma.teachers.findFirst({
+            where: {
+                initials: {
+                    startsWith: teacher
+                },
+            }
+        })
 
-        await ctx.editText(`🎉 Дата: ${getDate(tomorrow ? true : false)}:\n\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
+        const isEmptyText = text.includes("пара") ? "\n\n" + text : "\n\nРасписания нет\n";
+
+        await ctx.editText(`⭐️ <b>${registeredTeacher?.initials}</b>\nДата: ${getDate(tomorrow ? true : false)}:${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
             parse_mode: "HTML",
             reply_markup: scheduleStartTeacher(teacher, tomorrow),
         });

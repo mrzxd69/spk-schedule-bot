@@ -7,13 +7,13 @@ export class Main {
 		this.count = count;
 	}
 
-	public saveSchedule(search: string, date: string) {
+	public saveSchedule(search: string, date: string, searchEdit: string, countEdit: number) {
 		const saveGroup = async () => {
-			await new SaveManager(this.count).saveGroup(search, date);
+			await new SaveManager(this.count, countEdit).saveGroup(search, date);
 		};
 
 		const saveTeacher = async () => {
-			await new SaveManager(this.count).saveTeacher(search, date);
+			await new SaveManager(this.count, countEdit).saveTeacher(search, date, searchEdit);
 		};
 
 		return { saveGroup, saveTeacher };

@@ -3,23 +3,26 @@ import { Main } from "./main";
 
 export class Parser {
 	private count: number = 0;
+	private countEdit: number = 0;
 	private file: FileManager;
 
 	constructor(
-		private search: "у" | "каб",
+		private search: "у" | "каб" | "зам",
 		private date: string,
 	) {
 		this.file = new FileManager(search, this.count);
 	}
 
-	private async isGroup(search: "у" | "каб") {
+	private async isGroup(search: "у" | "каб" | "зам") {
 		const mainInstance = new Main(this.count);
 
 		if (search === "у") {
-			return mainInstance.saveSchedule(search, this.date).saveGroup();
+			return mainInstance.saveSchedule(search, this.date, "зам", this.countEdit).saveGroup();
 		}
 
-		return mainInstance.saveSchedule(search, this.date).saveTeacher();
+		if (search === "каб") {
+			return mainInstance.saveSchedule(search, this.date, "зам", this.countEdit).saveTeacher();
+		}
 	}
 
 	public async start() {

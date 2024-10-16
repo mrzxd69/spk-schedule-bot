@@ -2,15 +2,18 @@ export class FilterManager {
     private result: object = {}
 
     public TransformedDataTeacher(scheduleT: object): object {
-        this.result = Object.entries(scheduleT).reduce((acc, [surname, entries]) => {
-            //@ts-ignore
-            acc[surname] = entries.reduce((obj, [key, value]) => {
-                const key_number = Number(String(key).split(" ")[0])
-                obj[key_number] = value;
-                return obj;
+        this.result = Object.entries(scheduleT)
+            .reduce((acc, [surname, entries]) => {
+                //@ts-ignore
+                acc[surname] = entries.reduce((obj, [coup, name, off]) => {
+                    const key_number = Number(String(coup).split(" ")[0])
+                    const data = name + " " + "&&" + off
+                    obj[key_number] = data;
+
+                    return obj;
+                }, {});
+                return acc;
             }, {});
-            return acc;
-        }, {});
 
         return this.result
     }

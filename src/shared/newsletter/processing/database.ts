@@ -219,23 +219,32 @@ export const processingTeacherLesson = async (text: string, teacher: string, tea
 					group,
 					count: Number(count),
 					status: subGroupTeachers[subGroup],
-					date,
-				},
+					date
+				}
 			});
 
 			if (exist) {
-				if (exist.teacher !== teacherExist.id) {
+				if (exist.teacher !== teacherExist?.id) {
 					allRecordsExist = false;
 					text += `• <b>${lesson} пара</b>:\n Группа ${group}\n Кабинет: ${exist.room}\n\n`;
+
+
 					await prisma.lessons.update({
 						data: {
-							teacher: teacherExist.id,
+							// @ts-ignore
+							teacher: teacherExist?.id || teacherEditExist.id,
 						},
 						where: {
 							id: exist.id,
 						},
 					});
 				}
+			} else {
+				allRecordsExist = false;
+
+				// Доделать обновление в бд
+
+				text += `• <b>${lesson} пара</b>:\n Группа ${teacherData[lesson].replace("   ", " ").split(" &&")[0]}\n Кабинет: ${teacherData[lesson].split(" &&")[1] || "не указан"}\n\n`;
 			}
 		}
 

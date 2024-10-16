@@ -23,13 +23,19 @@ export class CreateScheduleTeacher {
 
 				if (key !== "__EMPTY" && !name.match(/\d+/g)) {
 					//@ts-ignore
-					if (!this.result[name]) {
+					if (!this.result[name]) { this.result[name] = [] }
+
+					const roomInfo = [
 						//@ts-ignore
-						this.result[name] = [];
-					}
+						empty[key],
+						value.split("  ")[1] === undefined ? "Пусто" : value.split("  ")[1]
+					];
+
+					// Добавляем название кабинета в конец массива
+					roomInfo.push(clean.__EMPTY); // Добавляем название кабинета
 
 					//@ts-ignore
-					this.result[name].push([empty[key], value.split("  ")[1] === undefined ? "Пусто" : value.split("  ")[1]]);
+					this.result[name].push(roomInfo);
 				}
 			}
 		}
