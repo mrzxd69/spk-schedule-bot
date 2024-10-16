@@ -14,7 +14,7 @@ export default (bot: TBot) => {
 
         let text = await getScheduleText("", lessons);
 
-        const isEmptyText = text.includes("b") ? "\n\n" + text : "\n\nРасписания нет\n";
+        const isEmptyText = text.includes("b") ? "\n" + text : "\n\nРасписания нет\n";
 
         await ctx.editText(`🎉 Группа: <b>${group}</b>\n🗓 Дата: ${getDate(tomorrow ? true : false)}:${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {
             parse_mode: "HTML",
