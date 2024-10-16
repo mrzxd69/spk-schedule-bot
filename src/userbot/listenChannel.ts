@@ -22,6 +22,7 @@ export const listenChannel = async () => {
 	const debouncer = new DebounceMessage();
 
 	dp.onNewMessage(async ({ chat, media }) => {
+		console.log(chat.id)
 		if (allowChannelsList.includes(chat.id) && media?.type === "document" && (await checkDocument(media.fileName!))) {
 			try {
 				await fs.rmdir(path.resolve() + "/data", { recursive: true }).catch(() => console.log("Данной директории не существует"));

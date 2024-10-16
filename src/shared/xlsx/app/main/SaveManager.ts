@@ -70,7 +70,7 @@ export class SaveManager {
 			for (const teacher in this.result) {
 				teachers.push(teacher);
 			}
-			console.log(this.mergeObjects(this.edites, this.teachers))
+			// console.log(this.mergeObjects(this.edites, this.teachers))
 			// @ts-ignore
 			await addTeachers(teachers);
 			await addLessonsTeachers(this.mergeObjects(this.edites, this.teachers), date);
