@@ -35,7 +35,6 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
     }
 
     if (data.lesson.status === LessonStatus.SubGroup1) {
-        console.log(data.lessonsList)
         lessonsList.push({
             status: LessonStatus.SubGroup1,
             text: `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
@@ -60,12 +59,14 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
 export const getScheduleText = async (text: string, lessons: any, isTeacher: boolean = false) => {
     let lessonsList: { status: LessonStatus, text: string }[] = [];
 
-    await Promise.all(lessons.map(async (lesson: ILesson) => await processingLesson({
-        text,
-        lesson,
-        isTeacher,
-        lessonsList
-    })));
+    for (const lesson of lessons) {
+        await processingLesson({
+            text,
+            lesson,
+            isTeacher,
+            lessonsList
+        });
+    }
 
     return lessonsList
         .map((lesson) => lesson.text)

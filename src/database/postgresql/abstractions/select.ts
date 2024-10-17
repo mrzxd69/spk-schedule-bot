@@ -24,8 +24,9 @@ export const selectLessons = async (group: string, isTomorrow: boolean) => {
 
 	const updatedLessons = lessons.map((lesson) => {
 		if (!lesson.teacher) {
-			const subGroup1Lesson = lessons.find((l) => l.status === "SubGroup1" && l.teacher);
-			const subGroup2Lesson = lessons.find((l) => l.status === "SubGroup2" && l.teacher);
+			const subGroup1Lesson = lessons.find((l) => l.status === "SubGroup1" && l.teacher && l.descipline === lesson.descipline);
+			const subGroup2Lesson = lessons.find((l) => l.status === "SubGroup2" && l.teacher && l.descipline === lesson.descipline);
+			console.log(subGroup1Lesson?.teacher || subGroup2Lesson?.teacher)
 			lesson.teacher = subGroup1Lesson?.teacher || subGroup2Lesson?.teacher || null;
 		}
 		return lesson;
