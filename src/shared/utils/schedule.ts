@@ -31,7 +31,7 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
                 group: data.group,
                 date: data.date,
                 status: "SubGroup1",
-                count: count - 1,
+                descipline: descipline
 
             }
         });
