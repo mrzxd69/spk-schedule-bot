@@ -1,6 +1,6 @@
 import { prisma } from "@postgresql/prisma";
 
-export const checkNeedEdit = async (group: string, lesson: string, lessonValue: any[], date: string) => {
+export const checkNeedEdit = async (group: string, date: string, lessonValue: any[]) => {
 	let needEdit = false;
 
 	for (const count in lessonValue) {
