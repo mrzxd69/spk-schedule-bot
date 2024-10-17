@@ -1,6 +1,6 @@
 import { prisma } from "@postgresql/prisma";
 
-export const checkNeedEdit = async (group: string, lesson: string, lessonValue: any[]) => {
+export const checkNeedEdit = async (group: string, lesson: string, lessonValue: any[], date: string) => {
 	let needEdit = false;
 
 	for (const count in lessonValue) {
@@ -11,7 +11,9 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 						group,
 						count: Number(count),
 						status: Number(lessonValue[count][0][1]) === 1 ? "SubGroup1" : "SubGroup2",
-						room: String(lessonValue[count][0][2])
+						room: String(lessonValue[count][0][2]),
+						descipline: lessonValue[count][0][0],
+						date
 					},
 				});
 
@@ -27,10 +29,12 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 
 				const existLesson = await prisma.lessons.findFirst({
 					where: {
+						group,
 						status: "JOINED",
 						room: String(lessonValue[count][0][1]),
 						descipline: lessonValue[count][0][0],
-						count: Number(count)
+						count: Number(count),
+						date
 					},
 				});
 
@@ -48,7 +52,8 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 					count: Number(count),
 					descipline: lessonValue[count][0][0],
 					room: String(lessonValue[count][0][2]),
-					status: lessonValue[count][0][1] == 1 ? "SubGroup1" : "SubGroup2"
+					status: lessonValue[count][0][1] == 1 ? "SubGroup1" : "SubGroup2",
+					date
 				},
 			});
 
@@ -58,7 +63,8 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 					count: Number(count),
 					descipline: lessonValue[count][1][0],
 					room: String(lessonValue[count][1][2]),
-					status: lessonValue[count][1][1] == 1 ? "SubGroup1" : "SubGroup2"
+					status: lessonValue[count][1][1] == 1 ? "SubGroup1" : "SubGroup2",
+					date
 				},
 			});
 

@@ -13,5 +13,5 @@ export const subGroupTeachers: any = {
 export const allowChannelsList = [
     Number(process.env.MAIN_CHANNEL),
     Number(process.env.BACKUP_CHANNEL),
-    -1002451183426, // for tests
+    -1002399306134, // for tests
 ];
