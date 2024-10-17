@@ -25,8 +25,8 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 		}
 
 		if (lessonValue[count].length === 1) {
-			if (lesson[0].length === 2) {
-
+			if (lessonValue[count][0].length === 2) {
+				console.log(lessonValue[count][0])
 				const existLesson = await prisma.lessons.findFirst({
 					where: {
 						group,
@@ -37,6 +37,7 @@ export const checkNeedEdit = async (group: string, lesson: string, lessonValue: 
 						date
 					},
 				});
+				console.log(existLesson);
 
 				if (!existLesson) {
 					console.log(2)

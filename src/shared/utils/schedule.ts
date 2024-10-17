@@ -31,10 +31,13 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
                 group: data.group,
                 date: data.date,
                 status: "SubGroup1",
-                descipline: descipline
-
+                descipline: descipline,
+                count: {
+                    in: [count, count - 1]
+                }
             }
         });
+        console.log(otherSubGroup)
     }
 
     const teacherText = !data.isTeacher && teacherName ? `\n   Ведёт: <i>${teacherName}</i>` : "";
