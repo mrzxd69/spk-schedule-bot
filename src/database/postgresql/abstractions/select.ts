@@ -18,7 +18,7 @@ export const selectLessons = async (group: string, isTomorrow: boolean) => {
 			group: group,
 		},
 		orderBy: {
-			id: "asc",
+			count: "asc",
 		},
 	});
 
