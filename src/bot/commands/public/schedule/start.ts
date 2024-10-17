@@ -12,7 +12,7 @@ export default (bot: TBot) => {
 
         const lessons = await selectLessons(group, tomorrow);
 
-        let text = await getScheduleText("", lessons, group, getDate(false));
+        let text = await getScheduleText("", lessons);
 
         const isEmptyText = text.includes("b") ? "\n" + text : "\n\nРасписания нет\n";
 

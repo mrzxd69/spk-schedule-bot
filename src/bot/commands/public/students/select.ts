@@ -29,7 +29,7 @@ export default (bot: TBot) =>
 
 			const lessons = await selectLessons(String(route + course), false);
 
-			let text = await getScheduleText("", lessons, String(route + course), getDate(false));
+			let text = await getScheduleText("", lessons);
 			const isEmptyText = text.includes("b") ? text : "\n\nРасписания нет\n";
 
 			await ctx.editText(`🎉 Ваша группа: ${route + course}\n🗓 Дата: ${getDate(false)}:\n${isEmptyText}\n⚠️ Учитывайте риск ошибки бота при сборе расписания с канала!`, {

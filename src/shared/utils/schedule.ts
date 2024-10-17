@@ -5,15 +5,15 @@ import { prisma } from "@src/database/postgresql/prisma";
 interface IProcessingLessonParams {
     text: string;
     lesson: ILesson;
-    group: string;
+    lessonsList: { status: LessonStatus, text: string }[];
     isTeacher?: boolean;
-    date: string
 }
 
 export const processingLesson = async (data: IProcessingLessonParams) => {
     const { count, descipline, room, teacher } = data.lesson;
+    const { lessonsList } = data;
+
     let teacherName = "";
-    let otherSubGroup: null | any = null;
 
     if (teacher) {
         const teacherEntity = await prisma.teachers.findFirst({
@@ -25,35 +25,49 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
         teacherName = teacherEntity?.initials || "";
     }
 
-    if (data.lesson.status === LessonStatus.SubGroup2) {
-        otherSubGroup = await prisma.lessons.findFirst({
-            where: {
-                group: data.group,
-                date: data.date,
-                status: "SubGroup1",
-                descipline: descipline
-            }
-        });
-        console.log(otherSubGroup)
-    }
-
     const teacherText = !data.isTeacher && teacherName ? `\n   Ведёт: <i>${teacherName}</i>` : "";
 
-    if (data.lesson.status === LessonStatus.Joined) data.text += `\n<b>${count === 0 ? "Промежуточ." : "Пара: " + count}</b>\n  ${descipline}\n   Кабинет: <b>${room}</b>${teacherText}\n`;
-    if (data.lesson.status === LessonStatus.SubGroup1) data.text += `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
-    if (data.lesson.status === LessonStatus.SubGroup2) data.text += `   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
+    if (data.lesson.status === LessonStatus.Joined) {
+        lessonsList.push({
+            status: LessonStatus.Joined,
+            text: `\n<b>${count === 0 ? "Промежуточ." : "Пара: " + count}</b>\n  ${descipline}\n   Кабинет: <b>${room}</b>${teacherText}\n`
+        });
+    }
 
-    return data.text;
+    if (data.lesson.status === LessonStatus.SubGroup1) {
+        console.log(data.lessonsList)
+        lessonsList.push({
+            status: LessonStatus.SubGroup1,
+            text: `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
+        });
+    }
+
+    if (data.lesson.status === LessonStatus.SubGroup2) {
+        if (lessonsList[lessonsList.length - 1]?.status !== LessonStatus.SubGroup1) {
+            lessonsList.push({
+                status: LessonStatus.SubGroup1,
+                text: `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
+            })
+        } else {
+            lessonsList.push({
+                status: LessonStatus.SubGroup2,
+                text: `   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
+            });
+        }
+    }
 };
 
-export const getScheduleText = async (text: string, lessons: any, group: string, date: string, isTeacher: boolean = false) => {
-    const replacedLessons = await Promise.all(lessons.map(async (lesson: ILesson) => await processingLesson({
+export const getScheduleText = async (text: string, lessons: any, isTeacher: boolean = false) => {
+    let lessonsList: { status: LessonStatus, text: string }[] = [];
+
+    await Promise.all(lessons.map(async (lesson: ILesson) => await processingLesson({
         text,
         lesson,
-        group,
         isTeacher,
-        date
+        lessonsList
     })));
 
-    return replacedLessons.join("");
+    return lessonsList
+        .map((lesson) => lesson.text)
+        .join("");
 };
