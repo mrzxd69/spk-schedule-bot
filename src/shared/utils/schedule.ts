@@ -32,9 +32,14 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
                 date: data.date,
                 status: "SubGroup1",
                 descipline: descipline,
-                count: {
-                    in: [count, count - 1]
-                }
+                OR: [
+                    {
+                        count: count - 1
+                    },
+                    {
+                        count: count
+                    }
+                ]
             }
         });
         console.log(otherSubGroup)
