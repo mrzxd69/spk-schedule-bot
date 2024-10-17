@@ -25,38 +25,23 @@ export const processingLesson = async (data: IProcessingLessonParams) => {
         teacherName = teacherEntity?.initials || "";
     }
 
-    const teacherText = !data.isTeacher && teacherName ? `\n   Ведёт: <i>${teacherName}</i>` : "";
-
-    if (data.lesson.status === LessonStatus.Joined) data.text += `\n<b>${count === 0 ? "Промежуточ." : "Пара: " + count}</b>\n  ${descipline}\n   Кабинет: <b>${room}</b>${teacherText}\n`;
-    if (data.lesson.status === LessonStatus.SubGroup1) data.text += `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
-
     if (data.lesson.status === LessonStatus.SubGroup2) {
         otherSubGroup = await prisma.lessons.findFirst({
             where: {
                 group: data.group,
                 date: data.date,
                 status: "SubGroup1",
-                descipline: descipline,
-                OR: [
-                    {
-                        count: count - 1
-                    },
-                    {
-                        count: count
-                    }
-                ]
+                descipline: descipline
             }
         });
         console.log(otherSubGroup)
     }
 
-    if (data.lesson.status === LessonStatus.SubGroup2) {
-        if (otherSubGroup) {
-            data.text += `   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
-        } else {
-            data.text += `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
-        }
-    };
+    const teacherText = !data.isTeacher && teacherName ? `\n   Ведёт: <i>${teacherName}</i>` : "";
+
+    if (data.lesson.status === LessonStatus.Joined) data.text += `\n<b>${count === 0 ? "Промежуточ." : "Пара: " + count}</b>\n  ${descipline}\n   Кабинет: <b>${room}</b>${teacherText}\n`;
+    if (data.lesson.status === LessonStatus.SubGroup1) data.text += `\n<b>Пара: ${count}</b>\n  ${descipline}\n   [1] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`;
+    if (data.lesson.status === LessonStatus.SubGroup2) data.text += `   [2] - <b>${room}</b>${teacherText.replace("\n   Ведёт: ", " | ")}\n`
 
     return data.text;
 };
