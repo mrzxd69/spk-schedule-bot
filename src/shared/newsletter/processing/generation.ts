@@ -9,7 +9,9 @@ const generateInitialTextGroup = async (group: string, date: string) => {
         where: { date, group },
     });
 
-    return existDate ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\n\n🖇 <b>Группа: </b> ${group}\nДата: ${getDefineDate(date)}\n\n` : `🖇 <b>Группа: </b> ${group}\n⏳ <b>Дата: </b> ${getDefineDate(date)}\n\n`;
+    return existDate
+        ? `♻️ ИЗМЕНЕНИЯ РАСПИСАНИЯ\n\n🖇 <b>Группа: </b> ${group}\nДата: ${getDefineDate(date)}\n\n`
+        : `🖇 <b>Группа: </b> ${group}\n⏳ <b>Дата: </b> ${getDefineDate(date)}\n\n`;
 };
 
 const generateInitialTextTeacher = async (teacher: string, date: string) => {

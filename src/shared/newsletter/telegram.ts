@@ -33,9 +33,9 @@ export const sendGroupSchedule = async (group: string, text: string) => {
 		text += "\n\n🥳" + group;
 	}
 
-	await Promise.all(users.map(async (user) => await sendMessage(String(user.telegram_id), text)));
+	users.map(async (user) => await sendMessage(String(user.telegram_id), text));
 };
 
 export const sendTeachersSchedule = async (users: any[], text: string) => {
-	await Promise.all(users.map(async (user) => await sendMessage(String(user.telegram_id), text)));
+	users.map(async (user) => await sendMessage(String(user.telegram_id), text));
 };
