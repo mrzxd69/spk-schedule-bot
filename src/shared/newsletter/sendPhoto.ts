@@ -8,9 +8,13 @@ export const sendPhoto = async (pathFile: string) => {
     const users = await prisma.users.findMany();
 
     for (const user of users) {
-        await botService.api.sendPhoto({
-            chat_id: String(user.telegram_id),
-            photo: MediaUpload.path(path.resolve() + "/data/" + pathFile),
-        });
+        try {
+            await botService.api.sendPhoto({
+                chat_id: String(user.telegram_id),
+                photo: MediaUpload.path(path.resolve() + "/data/" + pathFile),
+            });
+        } catch (e) {
+            console.log("ERROR TO SENDS PHOTOS:", e);
+        }
     }
 }

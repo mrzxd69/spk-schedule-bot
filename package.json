@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@formkit/tempo": "^0.1.2",
+		"@gramio/auto-retry": "^0.0.3",
 		"@gramio/autoload": "^1.1.0",
 		"@gramio/prompt": "^1.1.4",
 		"@mtcute/bun": "^0.16.9",
