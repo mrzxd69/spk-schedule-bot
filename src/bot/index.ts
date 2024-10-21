@@ -1,9 +1,11 @@
+import path from "path";
 import { Bot } from "gramio";
 import { prompt } from "@gramio/prompt";
 import { autoload } from "@gramio/autoload";
-import path from "path";
+import { autoRetry } from "@gramio/auto-retry";
 
 export const botService = new Bot(process.env.TELEGRAM_BOT_TOKEN)
+	.extend(autoRetry())
 	.onError("message", async ({ context, error }) => {
 		if (error instanceof Error) {
 			return context.send(error.message);
