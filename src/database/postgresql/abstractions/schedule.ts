@@ -16,7 +16,7 @@ export const addTeachers = async (initials: string[]) => {
 	const existingNamesSet = new Set(existsTeachers.map(({ initials }) => initials));
 
 	const newNames = initials.filter((initials) => !existingNamesSet.has(initials));
-
+	console.log(newNames)
 	if (newNames) {
 		await prisma.teachers.createMany({
 			data: newNames.map((initials) => ({

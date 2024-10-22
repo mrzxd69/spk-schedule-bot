@@ -187,6 +187,10 @@ export const processingLesson = async (group: string, date: string, lesson: stri
 			}
 		}
 
+		if (!text) {
+			text = "На сегодня занятий нет 🎉\n\n";
+		}
+
 		return {
 			text,
 			allRecordsExist,
@@ -246,6 +250,10 @@ export const processingTeacherLesson = async (text: string, teacher: string, tea
 
 				text += `• <b>${lesson} пара</b>:\n Группа ${teacherData[lesson].replace("   ", " ").split(" &&")[0]}\n Кабинет: ${teacherData[lesson].split(" &&")[1] || "не указан"}\n\n`;
 			}
+		}
+
+		if (!text) {
+			text = "На сегодня занятий нет 🎉\n\n";
 		}
 
 		return {
