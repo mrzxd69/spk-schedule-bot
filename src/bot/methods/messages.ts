@@ -16,7 +16,7 @@ export const sendMessage = async (chatId: string, message: string) => {
 			chat_id: chatId,
 			text: message,
 			parse_mode: "HTML",
-		}).catch(err => console.log("Message send error: ", err));
+		});
 
 		await scheduler.wait(
 			// @ts-ignore
@@ -27,6 +27,6 @@ export const sendMessage = async (chatId: string, message: string) => {
 		)
 
 	} catch (e) {
-		console.log("ERROR TO SENDS SCHEDULE:", e);
+		console.log("Error to send schedule:", e);
 	}
 };
