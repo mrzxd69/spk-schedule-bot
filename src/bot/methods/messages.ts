@@ -22,9 +22,9 @@ export const sendMessage = async (chatId: string, message: string) => {
 			// @ts-ignore
 			result instanceof TelegramError && result.params?.retry_after
 				// @ts-ignore
-				? result.params.retry_after * 1000
-				: 1000
-		)
+				? result.params.retry_after * 250
+				: 250
+		);
 
 	} catch (e) {
 		console.log("Error to send schedule:", e);
