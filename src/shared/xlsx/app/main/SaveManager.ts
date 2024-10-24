@@ -81,16 +81,17 @@ export class SaveManager {
 
 	public groupConvert(result: any) {
 		const res: { route: string; course: string }[] = [];
-
 		for (const section of result) {
-			for (const group of Object.keys(section)) {
-				if (group.length < 13) {
-					const match = group.match(/^([А-Яа-яA-Za-z]+)(\d+.*)$/);
-					if (match && match[1] && match[2]) {
-						res.push({
-							route: match[1],
-							course: match[2],
-						});
+			if (section !== undefined) {
+				for (const group of Object.keys(section)) {
+					if (group.length < 13) {
+						const match = group.match(/^([А-Яа-яA-Za-z]+)(\d+.*)$/);
+						if (match && match[1] && match[2]) {
+							res.push({
+								route: match[1],
+								course: match[2],
+							});
+						}
 					}
 				}
 			}
