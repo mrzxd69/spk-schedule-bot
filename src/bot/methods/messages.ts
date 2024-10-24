@@ -23,7 +23,7 @@ export const sendMessage = async (chatId: string, message: string) => {
 			result instanceof TelegramError && result.params?.retry_after
 				// @ts-ignore
 				? result.params.retry_after * 250
-				: 250
+				: 80
 		);
 
 	} catch (e) {
